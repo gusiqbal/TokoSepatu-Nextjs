@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useAuthModal } from "../helpers/auth-modal";
-import { useAuthStore } from "../helpers/auth-store";
-import { UserService } from "../services/UserService";
+import { useAuthModal } from "@/src/features/auth/store/auth-modal";
+import { useAuthStore } from "@/src/features/auth/store/auth-store";
+import { UserService } from "@/src/services/UserService";
 
 export default function RegisterForm() {
   const { isOpen, close } = useAuthModal();
@@ -19,14 +19,10 @@ export default function RegisterForm() {
     setError(null);
 
     const form = e.currentTarget;
-    const username = (form.elements.namedItem("username") as HTMLInputElement)
-      .value;
+    const username = (form.elements.namedItem("username") as HTMLInputElement).value;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
-    const password = (form.elements.namedItem("password") as HTMLInputElement)
-      .value;
-    const rePassword = (
-      form.elements.namedItem("re-password") as HTMLInputElement
-    ).value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+    const rePassword = (form.elements.namedItem("re-password") as HTMLInputElement).value;
 
     if (password !== rePassword) {
       setError("Password tidak cocok");
@@ -35,13 +31,7 @@ export default function RegisterForm() {
 
     try {
       setLoading(true);
-      const user = await userService.registerAPI({
-        username,
-        email,
-        password,
-        name: username,
-        is_active: true,
-      });
+      const user = await userService.registerAPI({ username, email, password, name: username, is_active: true });
       login(user, user.tokenValue);
       close();
     } catch (err) {
@@ -77,10 +67,7 @@ export default function RegisterForm() {
 
         <form className="space-y-4" onSubmit={handleRegister}>
           <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
               Username
             </label>
             <input
@@ -92,10 +79,7 @@ export default function RegisterForm() {
             />
           </div>
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email Address
             </label>
             <input
@@ -107,10 +91,7 @@ export default function RegisterForm() {
             />
           </div>
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
@@ -122,10 +103,7 @@ export default function RegisterForm() {
             />
           </div>
           <div>
-            <label
-              htmlFor="re-password"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="re-password" className="block text-sm font-medium text-gray-700">
               Re-enter Password
             </label>
             <input

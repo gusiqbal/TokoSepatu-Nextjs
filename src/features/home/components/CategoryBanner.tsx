@@ -7,9 +7,9 @@ const CategoryBanner = () => (
         { title: "New Sneakers", img: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&q=80&w=600" }
       ].map((item, idx) => (
         <div key={idx} className="relative group overflow-hidden h-64 cursor-pointer">
-          <img 
-            src={item.img} 
-            alt={item.title} 
+          <img
+            src={item.img}
+            alt={item.title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             referrerPolicy="no-referrer"
           />

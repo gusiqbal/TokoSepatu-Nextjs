@@ -1,0 +1,113 @@
+name: next-learnapp
+
+# ---------------------------------------------------------------------------
+# Shared extension fields
+# ---------------------------------------------------------------------------
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
+x-restart: &default-restart
+  restart: unless-stopped
+
+# ---------------------------------------------------------------------------
+# Services
+# ---------------------------------------------------------------------------
+services:
+
+  # -------------------------------------------------------------------------
+  # Next.js frontend
+  # -------------------------------------------------------------------------
+  app:
+    <<: *default-restart
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080}
+    image: next-learnapp:${APP_VERSION:-latest}
+    container_name: next-learnapp-app
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: "0.0.0.0"
+      # Runtime env vars (server-side only — not baked into the bundle)
+      INTERNAL_API_URL: ${INTERNAL_API_URL:-http://backend:8080}
+    env_file:
+      - path: .env.local
+        required: false
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    logging: *default-logging
+    labels:
+      com.learnapp.service: "frontend"
+      com.learnapp.version: "${APP_VERSION:-latest}"
+
+  # -------------------------------------------------------------------------
+  # Backend API (replace image / build context with your real backend)
+  # -------------------------------------------------------------------------
+  backend:
+    <<: *default-restart
+    image: ${BACKEND_IMAGE:-your-backend-image:latest}
+    container_name: next-learnapp-backend
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    environment:
+      PORT: 8080
+    env_file:
+      - path: .env.local
+        required: false
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: "2.00"
+          memory: 1G
+        reservations:
+          cpus: "0.50"
+          memory: 256M
+    logging: *default-logging
+    labels:
+      com.learnapp.service: "backend"
+      com.learnapp.version: "${APP_VERSION:-latest}"
+
+# ---------------------------------------------------------------------------
+# Networks
+# ---------------------------------------------------------------------------
+networks:
+  frontend:
+    name: learnapp-frontend
+    driver: bridge
+  backend:
+    name: learnapp-backend
+    driver: bridge

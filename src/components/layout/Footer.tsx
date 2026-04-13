@@ -1,5 +1,3 @@
-// import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
-
 const Footer = () => (
   <footer className="bg-gray-900 text-gray-400 pt-20 pb-10">
     <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
@@ -10,15 +8,9 @@ const Footer = () => (
         <p className="text-sm leading-relaxed mb-8">
           Lorem ipsum dolor sit amet consl adipisi elit, sed do eiusmod templ incididunt ut labore
         </p>
-        <div className="flex gap-4">
-          {/* {[Facebook, Twitter, Instagram, Youtube].map((Icon, idx) => (
-            <a key={idx} href="#" className="w-10 h-10 bg-gray-800 flex items-center justify-center rounded-full hover:bg-red-500 hover:text-white transition-all">
-              <Icon size={18} />
-            </a>
-          ))} */}
-        </div>
+        <div className="flex gap-4" />
       </div>
-      
+
       <div>
         <h4 className="text-white font-bold text-lg mb-8">Services</h4>
         <ul className="space-y-4 text-sm">

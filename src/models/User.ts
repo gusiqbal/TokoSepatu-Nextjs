@@ -1,5 +1,4 @@
-import { IUserResponse } from "./interfaces/IUserResponse";
-import { create, StateCreator } from "zustand";
+import { IUserResponse } from "@/src/types/IUserResponse";
 
 export class User {
   public id: number;

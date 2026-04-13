@@ -1,10 +1,10 @@
-import { BaseProduct } from "./BaseProducts";
-import { IProduct } from "./interfaces/IProducts";
+import { BaseProduct } from "./BaseProduct";
+import { IProduct } from "@/src/types/IProducts";
 
-class Shoes extends BaseProduct implements IProduct { 
+class Shoes extends BaseProduct implements IProduct {
     public discount: number;
-    
-    constructor(data: Partial<Shoes> & {oldPrice?: number, discount?: number}) {   
+
+    constructor(data: Partial<Shoes> & {oldPrice?: number, discount?: number}) {
         super(data);
         this.discount = +(data.discount ?? 0);
     }
@@ -25,7 +25,6 @@ class Shoes extends BaseProduct implements IProduct {
         return !!this.discount && this.discount > 0;
     }
 
-    // Contoh logika yang sering bikin berantakan di UI
     getDiscountAmount(): number {
         if (!this.hasDiscount()) return 0;
         return (this.price * this.discount) / 100;

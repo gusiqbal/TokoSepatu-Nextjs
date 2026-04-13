@@ -1,21 +1,29 @@
-import Header from './views/header';
-import Hero from './views/homepage/components/hero';
-import CategoryBanner from './views/homepage/components/categorybanner';
-import Topbar from './views/homepage/components/topbar';
-import FeaturedItems from './views/homepage/components/featureditems';
-import Footer from './views/footer';
+import Header from "@/src/components/layout/Header";
+import Footer from "@/src/components/layout/Footer";
+import TopBar from "@/src/features/home/components/TopBar";
+import Hero from "@/src/features/home/components/Hero";
+import CategoryBanner from "@/src/features/home/components/CategoryBanner";
+import FeaturedItems from "@/src/features/home/components/FeaturedItems";
+import PromoBanner from "@/src/features/home/components/FeaturedBanner";
+import Features from "@/src/features/home/components/Features";
+import SecondaryBanners from "@/src/features/home/components/SecondaryBanner";
+import Testimonials from "@/src/features/home/components/Testimonials";
 
 export default function Home() {
   return (
-    <div className='main-h-screen bg-white selection:bg-red-500 selection:tex-white'>
-      <Topbar />
+    <div className="min-h-screen bg-white selection:bg-red-500 selection:text-white">
+      <TopBar />
       <Header />
       <main>
         <Hero />
         <CategoryBanner />
         <FeaturedItems />
+        <PromoBanner />
+        <Features />
+        <SecondaryBanners />
+        <Testimonials />
       </main>
       <Footer />
-    </div>   
+    </div>
   );
 }

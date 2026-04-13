@@ -19,6 +19,5 @@ export abstract class BaseProduct {
         return this._price;
     }
 
-    abstract getFormattedPrice(): string; 
-
+    abstract getFormattedPrice(): string;
 }

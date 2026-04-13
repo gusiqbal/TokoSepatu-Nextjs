@@ -1,5 +1,5 @@
-import { create, StateCreator } from "zustand"
-import User from "../models/User";
+import { create, StateCreator } from "zustand";
+import User from "@/src/models/User";
 
 type AuthStoreState = {
     User: User | null;

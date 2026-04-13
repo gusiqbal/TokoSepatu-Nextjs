@@ -1,30 +1,42 @@
 "use client";
 
-import { useAuthModal } from "../helpers/auth-modal";
-import { useAuthStore } from "../helpers/auth-store";
-import { UserService } from "../services/UserService";
+import { useState } from "react";
+import { useAuthModal } from "@/src/features/auth/store/auth-modal";
+import { useAuthStore } from "@/src/features/auth/store/auth-store";
+import { UserService } from "@/src/services/UserService";
 
 export default function LoginForm() {
   const { isOpen, close } = useAuthModal();
   const login = useAuthStore((state) => state.login);
   const userService = new UserService();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
     const form = e.currentTarget;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
-    const password = (form.elements.namedItem("password") as HTMLInputElement)
-      .value;
-    const user = await userService.loginAPI(email, password);
-    login(user, user.tokenValue);
-    close();
+    const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+
+    try {
+      setLoading(true);
+      const user = await userService.loginAPI(email, password);
+      login(user, user.tokenValue);
+      close();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Login gagal");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="fixed inset-0 z-999 flex items-center justify-center">
       {/* Backdrop */}
-      <div className="absolute top-0 inset-0 bg-black/50" onClick={close} />
+      <div className="absolute inset-0 bg-black/50" onClick={close} />
 
       <div className="relative z-10 w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         <button
@@ -39,46 +51,49 @@ export default function LoginForm() {
           Login to Your Account
         </h2>
 
+        {error && (
+          <p className="text-sm text-center text-red-600 bg-red-50 border border-red-200 rounded-md py-2 px-3">
+            {error}
+          </p>
+        )}
+
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email Address
             </label>
             <input
               type="email"
               id="email"
+              name="email"
               required
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-red-500"
             />
           </div>
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
               type="password"
               id="password"
+              name="password"
               required
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-red-500"
             />
           </div>
           <button
             type="submit"
-            className="w-full py-2 text-white bg-red-500 rounded-md hover:bg-red-600 transition-colors"
+            disabled={loading}
+            className="w-full py-2 text-white bg-red-500 rounded-md hover:bg-red-600 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
         <p className="text-sm text-center text-gray-600">
-          Don't have an account?{" "}
-          <a onClick={close} className="text-red-500 hover:underline">
+          Don&apos;t have an account?{" "}
+          <a href="#" className="text-red-500 hover:underline">
             Sign Up
           </a>
         </p>
