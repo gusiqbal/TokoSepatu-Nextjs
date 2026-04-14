@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LoginForm from "@/src/features/auth/components/LoginForm";
+import RegisterForm from "@/src/features/auth/components/RegisterForm";
+import CartDrawer from "@/src/features/cart/components/CartDrawer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +32,8 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <LoginForm />
+        <RegisterForm />
+        <CartDrawer />
         {children}
       </body>
     </html>

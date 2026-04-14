@@ -8,12 +8,14 @@ import PromoBanner from "@/src/features/home/components/FeaturedBanner";
 import Features from "@/src/features/home/components/Features";
 import SecondaryBanners from "@/src/features/home/components/SecondaryBanner";
 import Testimonials from "@/src/features/home/components/Testimonials";
+import Navbar from "@/src/components/layout/Navbar";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white selection:bg-red-500 selection:text-white">
       <TopBar />
       <Header />
+      <Navbar />
       <main>
         <Hero />
         <CategoryBanner />
