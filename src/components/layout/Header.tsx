@@ -27,9 +27,9 @@ const Header = () => {
             <input
               type="text"
               placeholder="Search for shoes..."
-              className="w-full border border-gray-300 rounded-full py-2.5 px-6 focus:outline-none focus:border-red-500 transition-colors text-sm text-gray-700"
+              className="w-full border border-gray-300 rounded-full py-2.5 px-6 focus:outline-none focus:border-red-500 transition-colors text-sm text-gray-700 "
             />
-            <button className="absolute right-0 bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition-colors">
+            <button className="absolute right-0 bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition-colors hover:cursor-pointer">
               <Search size={16} />
             </button>
           </div>
@@ -44,7 +44,7 @@ const Header = () => {
           {/* Cart */}
           <button
             onClick={openCart}
-            className="relative text-gray-600 hover:text-red-500 transition-colors"
+            className="relative text-gray-600 hover:text-red-500 transition-colors hover:cursor-pointer"
             aria-label="Open cart"
           >
             <ShoppingBag size={22} />
@@ -59,7 +59,7 @@ const Header = () => {
           {IsloggedIn ? (
             <Link
               href="/profile"
-              className="relative text-gray-600 hover:text-red-500 transition-colors"
+              className="relative text-gray-600 hover:text-red-500 transition-colors "
               aria-label="My account"
             >
               <UserCircle size={22} />
@@ -67,7 +67,7 @@ const Header = () => {
           ) : (
             <button
               onClick={() => openAuth("login")}
-              className="relative text-gray-600 hover:text-red-500 transition-colors"
+              className="relative text-gray-600 hover:text-red-500 transition-colors hover:cursor-pointer"
               aria-label="Sign in"
             >
               <UserCircle size={22} />

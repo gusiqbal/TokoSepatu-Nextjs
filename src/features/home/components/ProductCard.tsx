@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { Heart, Search, ShoppingBag, TicketPercent } from "lucide-react";
 import clsx from "clsx";
+import Shoes from "@/src/models/Shoes";
 
 interface ProductCardProps {
-  product: any;
+  product: Shoes;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => (
@@ -15,6 +16,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => (
             -{product.discount}%
           </span>
         )}
+
         <img
           src={product.image}
           alt={product.name}
