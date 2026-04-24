@@ -15,3 +15,8 @@ export type IUserCreateRequest = Omit<IUserResponse, "id" | "created_at"> & {
 };
 
 export type IUserUpdateRequest = Partial<IUserCreateRequest>;
+
+export interface IRegisterResponse {
+  message: string;
+  username: string;
+}
