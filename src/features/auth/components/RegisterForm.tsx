@@ -2,15 +2,18 @@
 
 import { useState } from "react";
 import { useAuthModal } from "@/src/features/auth/store/auth-modal";
-import { useAuthStore } from "@/src/features/auth/store/auth-store";
 import { UserService } from "@/src/services/UserService";
+import { Eye, EyeOff } from "lucide-react";
+import SuccessRegister from "./SuccessRegister";
 
 export default function RegisterForm() {
   const { isOpen, mode, close, switchMode } = useAuthModal();
-  const login = useAuthStore((state) => state.login);
   const userService = new UserService();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRePassword, setShowRePassword] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   if (!isOpen || mode !== "register") return null;
 
@@ -34,22 +37,30 @@ export default function RegisterForm() {
 
     try {
       setLoading(true);
-      const user = await userService.registerAPI({
+      await userService.registerUser({
         username,
         email,
         password,
         name: username,
         is_active: true,
       });
-      //display notif register success & switch to login form
-
-      close();
+      setShowSuccess(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registrasi gagal");
     } finally {
       setLoading(false);
     }
   };
+
+  if (showSuccess)
+    return (
+      <SuccessRegister
+        onContinue={() => {
+          setShowSuccess(false);
+          switchMode();
+        }}
+      />
+    );
 
   return (
     <div className="fixed inset-0 z-[999] flex items-center justify-center">
@@ -111,12 +122,19 @@ export default function RegisterForm() {
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               name="password"
               required
               className="w-full px-3 py-2 mt-1 border text-gray-700 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-red-500"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword((s) => !s)}
+              className="absolute right-10 top-74 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
           <div>
             <label
@@ -126,13 +144,20 @@ export default function RegisterForm() {
               Re-enter Password
             </label>
             <input
-              type="password"
+              type={showRePassword ? "text" : "password"}
               id="re-password"
               name="re-password"
               required
               className="w-full px-3 py-2 mt-1 border text-gray-700 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-red-500"
             />
           </div>
+          <button
+            type="button"
+            onClick={() => setShowRePassword((s) => !s)}
+            className="absolute right-10 top-94.5 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+          >
+            {showRePassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
           <button
             type="submit"
             disabled={loading}

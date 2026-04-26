@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuthModal } from "@/src/features/auth/store/auth-modal";
 import { useAuthStore } from "@/src/features/auth/store/auth-store";
-import { UserService } from "@/src/services/UserService";
+import { loginUser } from "@/src/lib/auth";
 
 export default function LoginForm() {
   const { isOpen, mode, close, switchMode } = useAuthModal();
   const login = useAuthStore((state) => state.login);
-  const userService = new UserService();
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -25,9 +26,10 @@ export default function LoginForm() {
 
     try {
       setLoading(true);
-      const user = await userService.loginAPI(email, password);
-      login(user, user.tokenValue);
+      const loginResponse = await loginUser(email, password);
+      //login(loginResponse.user, loginResponse.usertoken);
       close();
+      router.push("/profile");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login gagal");
     } finally {
