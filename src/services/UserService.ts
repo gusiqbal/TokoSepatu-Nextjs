@@ -7,35 +7,26 @@ import {
 } from "@/src/types/IUserResponse";
 
 export class UserService {
-  private baseUrl = process.env.NEXT_PUBLIC_API_URL
-    ? `${process.env.NEXT_PUBLIC_API_URL}/accounts`
-    : "http://localhost:8080/account";
+  private BASE_URL: string | undefined = process.env.DEV_API_URL;
+  private REGISTER_ENDPOINT: string = `${this.BASE_URL}accounts`;
+  private PROFILE_BASE_ENDPOINT: string = `${this.BASE_URL}profile`;
 
-  private REGISTER_ENDPOINT: string = `http://localhost:8080/accounts`;
-  private LOGIN_ENDPOINT: string = `http://localhost:8080/sessions`;
-
-  async loginAPI(username: string, password: string): Promise<User> {
-    const res = await fetch(this.LOGIN_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
+  async getUser(token: string): Promise<User> {
+    const res = await fetch(`${this.PROFILE_BASE_ENDPOINT}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
-    if (!res.ok) throw new Error("Login gagal");
-
+    if (!res.ok) throw new Error("Failed fetch user");
     const rawData: IUserResponse = await res.json();
+
     return new User(rawData);
   }
 
-  async getUser(id: number): Promise<User> {
-    const res = await fetch(`${this.baseUrl}/${id}`);
-    if (!res.ok) throw new Error("User tidak ditemukan");
-
-    const rawData: IUserResponse = await res.json();
-    return new User(rawData);
-  }
-
-  async registerAPI(payload: IUserCreateRequest): Promise<IRegisterResponse> {
+  async registerUser(payload: IUserCreateRequest): Promise<IRegisterResponse> {
     const res = await fetch(this.REGISTER_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -49,7 +40,7 @@ export class UserService {
   }
 
   async updateUser(id: number, payload: IUserUpdateRequest): Promise<User> {
-    const res = await fetch(`${this.baseUrl}/${id}`, {
+    const res = await fetch(`${this.PROFILE_BASE_ENDPOINT}/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
