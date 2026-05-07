@@ -7,6 +7,7 @@ export class User {
   public email: string;
   public isActive: boolean;
   public createdAt: Date;
+  public avatar?: string;
   private token: string | "";
 
   constructor(data: IUserResponse) {
@@ -17,6 +18,7 @@ export class User {
     this.isActive = data.is_active;
     this.createdAt = new Date(data.created_at);
     this.token = data.token || "";
+    this.avatar = data.avatar;
   }
 
   get fullName(): string {

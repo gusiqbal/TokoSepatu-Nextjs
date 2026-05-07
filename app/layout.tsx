@@ -4,6 +4,8 @@ import "./globals.css";
 import LoginForm from "@/src/features/auth/components/LoginForm";
 import RegisterForm from "@/src/features/auth/components/RegisterForm";
 import CartDrawer from "@/src/features/cart/components/CartDrawer";
+import Providers from "@/app/providers";
+import SessionSync from "@/src/features/auth/components/SessionSync";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,10 +33,13 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <LoginForm />
-        <RegisterForm />
-        <CartDrawer />
-        {children}
+        <Providers>
+          <SessionSync />
+          <LoginForm />
+          <RegisterForm />
+          <CartDrawer />
+          {children}
+        </Providers>
       </body>
     </html>
   );

@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { Mail, Calendar, LogOut } from "lucide-react";
+import { signOut } from "next-auth/react";
 import { useAuthStore } from "@/src/features/auth/store/auth-store";
 
 export default function ProfileInfo() {
@@ -10,13 +12,28 @@ export default function ProfileInfo() {
 
   const initials = `${User.firstName[0] ?? ""}${User.lastName?.[0] ?? ""}`.toUpperCase();
 
+  const handleLogout = () => {
+    logout();
+    signOut({ callbackUrl: "/" });
+  };
+
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-5">
       {/* Avatar + name */}
       <div className="flex items-center gap-4">
-        <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center text-white text-2xl font-bold select-none flex-shrink-0">
-          {initials}
-        </div>
+        {User.avatar ? (
+          <Image
+            src={User.avatar}
+            alt={User.fullName}
+            width={64}
+            height={64}
+            className="w-16 h-16 rounded-full object-cover flex-shrink-0"
+          />
+        ) : (
+          <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center text-white text-2xl font-bold select-none flex-shrink-0">
+            {initials}
+          </div>
+        )}
         <div className="min-w-0">
           <h2 className="text-xl font-bold text-gray-800 truncate">{User.fullName}</h2>
           <span className="inline-block text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
@@ -43,7 +60,7 @@ export default function ProfileInfo() {
 
       {/* Logout */}
       <button
-        onClick={logout}
+        onClick={handleLogout}
         className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 font-medium transition-colors"
       >
         <LogOut size={16} /> Sign Out

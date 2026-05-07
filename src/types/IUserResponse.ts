@@ -6,6 +6,7 @@ export interface IUserResponse {
   is_active: boolean;
   created_at: string;
   token?: string;
+  avatar?: string;
 }
 
 export type IUserCreateRequest = Omit<IUserResponse, "id" | "created_at"> & {
